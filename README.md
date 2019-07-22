@@ -5,7 +5,7 @@
 ![图片](https://github.com/cdoer/webrtcLiveSimple/blob/master/image/main.png)
 ![图片](https://github.com/cdoer/webrtcLiveSimple/blob/master/image/user2_main.png)
 ![图片](https://github.com/cdoer/webrtcLiveSimple/blob/master/image/room.png)
-![图片](https://github.com/cdoer/webrtcLiveSimple/treblobe/master/image/user2_room.png)
+![图片](https://github.com/cdoer/webrtcLiveSimple/blob/master/image/user2_room.png)
 
 
 #注意：需要配置tomcat为https运行
