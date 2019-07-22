@@ -1,4 +1,5 @@
-#基于webrtc+websocket的直播demo
+# 基于webrtc+websocket的直播demo 
+
 ![图片](https://github.com/cdoer/webrtcLiveSimple/blob/master/image/login.png)
 ![图片](https://github.com/cdoer/webrtcLiveSimple/blob/master/image/reg.png)
 ![图片](https://github.com/cdoer/webrtcLiveSimple/blob/master/image/main.png)
@@ -13,4 +14,3 @@
 
 ## 另  邮箱 1249492252@qq.com
 ## 有问题可以联系我
-![图片](https://github.com/cdoer/webrtcSimple/tree/master/web/demo.png)
