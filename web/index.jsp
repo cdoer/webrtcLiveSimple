@@ -1,54 +1,126 @@
-
+<%@ page import="com.yxy.webrtc.utils.ChatRoomUtils" %>
+<%@ page import="java.util.Collection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%
+    Collection rooms =  ChatRoomUtils.chatRoomMap.values();
+    request.setAttribute("rooms",rooms);
+%>
 <html>
 <!DOCTYPE html>
-  <head>
-    <title>视频聊天室 Create by yang</title>
+<head>
+    <title>视频会议室 Create by yang</title>
     <jsp:include page="src-import.jsp"></jsp:include>
     <script src="index.js"></script>
-  </head>
-  <body style="width: 100%; height: 100%;">
-      <div style="height:60px;width:100%; background:#1E9FFF;
-          color: #fff; line-height: 60px;box-sizing: border-box; padding: 0 10px; ">
-        <%=session.getAttribute("name")%>，欢迎来到视频聊天室,当前房间号<span id="roomname" style="color:#393D49; vertical-align:middle; padding:0 10px;
-        font-size: 30px;"><%=session.getAttribute("room")%></span>，<span id="room_state">等待加入...</span>
-        <div  style="display: inline-block;">
-          <div class="layui-form" action="">
-            <div class="layui-form-item">
-              <div class="layui-inline">
-                <label class="layui-form-label">加入房间：</label>
-                <div class="layui-input-block">
-                  <input type="text" id="room" style="display: inline-block" placeholder="房间号" autocomplete="off" class="layui-input">
+</head>
+<body>
+<jsp:include page="header.jsp"/>
+
+
+<div class="layui-container fly-marginTop">
+    <div class="layui-row layui-col-space15">
+        <c:if test="${empty user.room}">
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">创建会议</div>
+                    <div class="layui-card-body" style="text-align: center;">
+                        <button class="layui-btn-primary layui-btn layui-btn-lg layui-anim-rotate layui-anim " id="createRoom">
+                            <i class="layui-icon layui-icon-release"></i>
+                            创建会议
+                        </button>
+                    </div>
                 </div>
-              </div>
-              <div class="layui-inline">
-                <button class="layui-btn" lay-submit lay-filter="formDemo" id="join">立即加入</button>
-              </div>
             </div>
-          </div>
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">加入会议</div>
+                    <div class="layui-card-body" style="text-align: center;">
+                        <button class="layui-btn-primary layui-btn layui-btn-lg layui-anim-rotate layui-anim " id="joinRoom">
+                            <i class="layui-icon layui-icon-search"></i>
+                            加入会议
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </c:if>
+        <c:if test="${! empty user.room}">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">正在参加会议【${user.room.title}】</div>
+                    <div class="layui-card-body" style="text-align: center;">
+                        <c:if test="${user.room.creator==user}">
+                            <button class="layui-btn-primary layui-btn layui-btn-lg" id="endChat">
+                                <i class="layui-icon layui-icon-close"></i>
+                                解散会议
+                            </button>
+                        </c:if>
+                        <c:if test="${user.room.creator!=user}">
+                            <button class="layui-btn-primary layui-btn layui-btn-lg" id="exitRoom">
+                                <i class="layui-icon layui-icon-close"></i>
+                                退出会议
+                            </button>
+                        </c:if>
+                    </div>
+                </div>
+            </div>
+        </c:if>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">正在进行的会议</div>
+                <div class="layui-card-body">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="300">
+                            <col width="200">
+                            <col width="100">
+                            <col width="100">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>会议名称</th>
+                            <th>会议ID</th>
+                            <th>主持人</th>
+                            <th>人数</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach items="${rooms}" var="room">
+                                <tr>
+                                    <td>${room.title}</td>
+                                    <td>${room.roomName}</td>
+                                    <td>${room.creator.name}</td>
+                                    <td>${fn:length(room.userList)}</td>
+                                    <td>
+                                        <button roomName="${room.roomName}" hasPwd="${! empty room.pwd}"
+                                            class="layui-btn <c:if test="${user.room!=null&&user.room==room}">layui-btn-disabled</c:if>"
+                                            id="joinRoom2">
+                                            <i class="layui-icon layui-icon-add-circle-fine"></i>
+                                            加入会议
+                                        </button>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            <c:if test="${fn:length(rooms)==0}">
+                                    <td colspan="5" align="center">当前无会议</td>
+                            </c:if>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-      </div>
-      <div id="videobox" style=" width:100%;margin: 0px auto;background:#f5f5f5;position: absolute; top:60px; bottom: 0;">
-          <div style="width: 50%; height:575px;float: left; position: relative;">
-              <video id="you" style="width: 100%;"  autoplay>
-              </video>
-              <div id="mask" style="text-align: center;background:#000;opacity:0.6; color:#fff; line-height:575px;
-              left: 0;top: 0; position: absolute; width:100%; height:100%; ">
-                    等待加入....
-              </div>
-          </div>
-          <div style="width: 50%;height:575px;float: left;position: relative;">
-              <video id="me" style="width: 100%;" autoplay>
-              </video>
-          </div>
-      </div>
-      <script>
-        $(function(){
-          webos.execute({
-              name:"<%=session.getAttribute("name")==null?"":(String)session.getAttribute("name")%>",
-              room:"<%=session.getAttribute("room")==null?"":(String)session.getAttribute("room")%>"
-          });
-        })
-      </script>
-  </body>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        webos.execute("index",{
+
+        });
+    })
+</script>
+</body>
 </html>

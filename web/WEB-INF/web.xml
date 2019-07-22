@@ -3,12 +3,36 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>com.yxy.base.filter.LoginFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/index.jsp</url-pattern>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>SettingsServlet</servlet-name>
         <servlet-class>com.yxy.webrtc.servlet.SettingsServlet</servlet-class>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>SettingsServlet</servlet-name>
         <url-pattern>/settings</url-pattern>
     </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>ActionServlet</servlet-name>
+        <servlet-class>com.yxy.webrtc.servlet.ActionServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ActionServlet</servlet-name>
+        <url-pattern>/ActionServlet</url-pattern>
+    </servlet-mapping>
+
+
 </web-app>
